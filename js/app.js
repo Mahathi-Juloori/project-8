@@ -1,4 +1,3 @@
-//get all ids from html 
 const colorPicker=document.getElementById("color");
 const brushSizeSelector=document.getElementById("BrushSize");
 const brushSizeLabel=document.getElementById("brushSizeLabel");
@@ -9,34 +8,27 @@ const clearCanvasBtn=document.getElementById("clean");
 const DownloadDrawingBtn=document.getElementById("download");
 const canvas=document.getElementById("canvas");
 
-//prepare the canvas content
 const ctx=canvas.getContext("2d");
-//setting canvas size 
 canvas.height=420;
 canvas.width=800;
 
-//set state variables (app memory)
-let isDrawing=false; //currently drawing anything with freehand
-let currentTool="pen"; // "pen" or "eraser"
-let isDrawingSquare=false; //if true , then square /rectangle mode is enable 
+let isDrawing=false; 
+let currentTool="pen";
+let isDrawingSquare=false; 
 
-//setting default brush styles 
-ctx.strokeStyle=colorPicker.value; //line color
-ctx.lineWidth=brushSizeSelector.value;//brush thickness
-ctx.lineCap="round" // makes line ends rounded (smoother drawing)
+ctx.strokeStyle=colorPicker.value; 
+ctx.lineWidth=brushSizeSelector.value;
+ctx.lineCap="round" 
 
-//variable for rectangle start points
 let startX=0;
 let startY=0;
 
-// Update color when color picker changes
 colorPicker.addEventListener("input",(e)=>{
     ctx.strokeStyle=e.target.value;
 })
 
-//Drawing function 
 
-function startDraw(e)//when mouse is pressed down
+function startDraw(e)
 {
    if(isDrawingSquare){
        startX=e.offsetX;
@@ -44,11 +36,11 @@ function startDraw(e)//when mouse is pressed down
        return;
    }
    isDrawing=true;
-   ctx.beginPath();//start a new path 
+   ctx.beginPath(); 
    ctx.moveTo(e.offsetX,e.offsetY)
 }
 
-function draw(e)//when mouse moves
+function draw(e)
 {
    if(!isDrawing) return; 
    ctx.strokeStyle=currentTool=="eraser"?"#ffffff":colorPicker.value;
@@ -58,7 +50,7 @@ function draw(e)//when mouse moves
    ctx.beginPath();
    ctx.moveTo(e.offsetX,e.offsetY);
 }
-function stopDrawing(e)//when mouse is released
+function stopDrawing(e)
 {
   if(isDrawingSquare){
     let endX=e.offsetX;
@@ -74,7 +66,6 @@ function stopDrawing(e)//when mouse is released
   }
   isDrawing=false;
 }
-//tool buttons (event listeners)
 eraserTool.addEventListener("click",()=>{
     isDrawingSquare=false;
     penTool.classList.remove("active")
@@ -102,7 +93,7 @@ clearCanvasBtn.addEventListener("click",()=>{
     ctx.clearRect(0,0,canvas.width,canvas.height)
 })
 DownloadDrawingBtn.addEventListener("click",()=>{
-   let canvasImage=canvas.toDataURL("image/png");//convert canvas to an image string 
+   let canvasImage=canvas.toDataURL("image/png"); 
    let anchorEle=document.createElement("a");
    anchorEle.href=canvasImage;
    anchorEle.download="WhiteBoard.png"
@@ -111,7 +102,7 @@ DownloadDrawingBtn.addEventListener("click",()=>{
    document.body.removeChild(anchorEle)
 })
 
-// Mouse events on tha canvas 
 canvas.addEventListener("mousedown",startDraw)
 canvas.addEventListener("mousemove",draw)
 canvas.addEventListener("mouseup",stopDrawing)
+
